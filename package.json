@@ -1,0 +1,41 @@
+{
+  "name": "senmu-bff",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:senmu-a/senmu-bff.git",
+  "author": "senmu <951967917@qq.com>",
+  "license": "MIT",
+  "scripts": {
+    "serve": "ts-node-dev --respawn --transpile-only main.ts",
+    "build": "tsc",
+    "start": "pm2 start ecosystem.config.js --env production",
+    "stop": "pm2 stop senmu-app",
+    "reload": "pm2 reload senmu-app",
+    "delete": "pm2 delete senmu-app",
+    "logs": "pm2 logs senmu-app",
+    "monit": "pm2 monit senmu-app"
+  },
+  "dependencies": {
+    "awilix": "^12.0.4",
+    "awilix-koa": "^11.1.0",
+    "co": "^4.6.0",
+    "koa": "^2.15.4",
+    "koa-router": "^13.0.1",
+    "koa-static": "^5.0.0",
+    "koa-swig": "^2.2.1",
+    "log4js": "^6.9.1",
+    "module-alias": "^2.2.3",
+    "serverless-http": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/co": "^4.6.6",
+    "@types/koa": "^2.15.0",
+    "@types/koa-router": "^7.4.8",
+    "@types/koa-static": "^4.0.4",
+    "@types/module-alias": "^2.0.4",
+    "@types/node": "^22.13.5",
+    "pm2": "^5.4.3",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.7.3"
+  }
+}

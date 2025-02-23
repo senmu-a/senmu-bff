@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    // 指定ECMAScript目标版本
+    "target": "ES2024",
+    // 禁止隐式的 any 类型
+    "noImplicitAny": true,
+    // 禁止隐式的 this 类型
+    "noImplicitThis": true,
+    // 启用实验性的装饰器特性
+    "experimentalDecorators": true,
+    // 允许对 ES 模块进行互操作性支持
+    "esModuleInterop": true,
+    // 指定模块系统
+    "module": "NodeNext",
+    // 指定模块解析策略
+    "moduleResolution": "nodenext",
+    // 允许合成默认导入
+    "allowSyntheticDefaultImports": true,
+    // 指定类型定义文件的根目录
+    "typeRoots": ["node_modules/@types"],
+    // 基础目录，用于解析非相对模块名称
+    "baseUrl": "./",
+    // 模块路径映射
+    "paths": {
+      "@interfaces/*": ["interface/*"],
+      "@config/*": ["config/*"],
+      "@middlewares/*": ["middlewares/*"],
+      "@utils/*": ["utils/*"]
+    }
+  },
+  "include": ["**/*"]
+}
