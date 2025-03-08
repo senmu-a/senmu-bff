@@ -1,0 +1,76 @@
+AWSTemplateFormatVersion: '2010-09-09'  # AWS CloudFormation 模板版本
+Transform: AWS::Serverless-2016-10-31  # 启用 AWS SAM (Serverless Application Model) 转换
+
+Globals:  # 全局配置，将应用于所有函数
+  Function:  # 函数全局配置
+    Timeout: 30  # 函数超时时间，单位秒
+    MemorySize: 1024  # 函数内存大小，单位MB
+    Runtime: nodejs20.x  # 运行时环境为 Node.js 20.x
+    Architectures: ['arm64']  # 使用 ARM64 架构（更省成本）
+    Environment:  # 环境变量配置
+      Variables:
+        NODE_OPTIONS: '--enable-source-maps'  # 启用源码映射，便于调试
+    EphemeralStorage:  # 临时存储配置
+      Size: 512  # 临时存储大小，单位MB
+  Api:  # API 全局配置
+    OpenApiVersion: '2.0'  # 使用 OpenAPI 2.0 规范
+    Cors:  # 跨域资源共享配置
+      AllowMethods: "'*'"  # 允许所有 HTTP 方法
+      AllowHeaders: "'Content-Type,Authorization'"  # 允许的 HTTP 头
+      AllowOrigin: "'*'"  # 允许所有来源
+      MaxAge: 600  # 预检请求结果缓存时间，单位秒
+
+Resources:  # 资源定义部分
+  NodeModulesLayer:  # Lambda 层资源，用于共享 node_modules
+    Type: AWS::Serverless::LayerVersion  # Lambda 层类型
+    Properties:
+      LayerName: senmu-bff-dependencies  # 层名称
+      Description: Node modules for Koa application  # 层描述
+      ContentUri: layer/  # 层内容路径
+      CompatibleRuntimes:  # 兼容的运行时环境
+        - nodejs20.x
+      RetentionPolicy: Retain  # 版本保留策略（保留所有版本）
+
+  Api:  # API Gateway 资源
+    Type: AWS::Serverless::Api  # Serverless API 类型
+    Properties:
+      StageName: dev  # API 部署阶段名称
+      BinaryMediaTypes:  # 二进制媒体类型，用于处理二进制内容
+        - 'image/*'  # 支持所有图像类型
+        - 'multipart/form-data'  # 支持表单数据（文件上传等）
+      Auth:  # API 认证配置
+        DefaultAuthorizer: NONE  # 默认不使用认证器
+
+  KoajsFunction:  # Lambda 函数
+    Type: AWS::Serverless::Function  # Serverless 函数类型
+    Metadata:
+      SkipBuild: true  # 跳过 SAM 构建过程（手动构建）
+    Properties:
+      Handler: lambda.handler  # 函数处理程序入口
+      CodeUri: ./dist  # 函数代码路径
+      MemorySize: 3008  # 函数内存大小，覆盖全局设置
+      Timeout: 30  # 函数超时时间
+      Layers:  # 使用的 Lambda 层
+        - !Ref NodeModulesLayer  # 引用上面定义的 NodeModulesLayer
+      Policies:  # IAM 策略配置
+        - S3CrudPolicy:  # S3 存储桶操作权限
+            BucketName: aladdinagi-assets  # 允许访问的 S3 存储桶
+        - VPCAccessPolicy: {}  # VPC 访问权限
+      Events:  # 函数触发事件
+        ApiEvent:  # API 事件配置
+          Type: Api  # 事件类型为 API
+          Properties:
+            Path: /{proxy+}  # 路径配置，{proxy+} 表示捕获所有路径
+            Method: ANY  # 响应所有 HTTP 方法
+            RestApiId: !Ref Api  # 关联的 API Gateway
+            Auth:  # API 事件认证配置
+              Authorizer: NONE  # 不使用认证器
+      AutoPublishAlias: live  # 自动发布的函数别名
+
+Outputs:  # 输出部分，用于在部署后显示或导出信息
+  ApiEndpoint:  # API 端点输出
+    Description: API Gateway endpoint URL  # 描述
+    Value: !Sub 'https://${Api}.execute-api.${AWS::Region}.amazonaws.com/dev'  # API URL
+  FunctionArn:  # Lambda 函数 ARN 输出
+    Description: Lambda Function ARN  # 描述
+    Value: !GetAtt KoajsFunction.Arn  # 函数 ARN

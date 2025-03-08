@@ -66,10 +66,10 @@ ErrorHandler.error(app, logger);
 
 // 注册所有路由
 app.use(loadControllers(`${__dirname}/routers/*.ts`));
-// if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
   app.listen(port, () => {
     console.log(`🌼🌼🌼Server is running on port ${port}`);
     console.log(`Environment: ${process.env.NODE_ENV}`);
   });
-// }
+}
 export default app;

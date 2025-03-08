@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "awilix": "^12.0.4",
+    "awilix-koa": "^11.1.0",
+    "co": "^4.6.0",
+    "koa": "^2.15.4",
+    "koa-router": "^13.0.1",
+    "koa-static": "^5.0.0",
+    "koa-swig": "^2.2.1",
+    "log4js": "^6.9.1",
+    "module-alias": "^2.2.3",
+    "serverless-http": "^3.2.0"
+  }
+}
