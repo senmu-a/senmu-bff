@@ -25,7 +25,9 @@
       "@interfaces/*": ["interface/*"],
       "@config/*": ["config/*"],
       "@middlewares/*": ["middlewares/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@services/*": ["services/*"],
+      "@routers/*": ["routers/*"],
     }
   },
   "include": ["**/*"]

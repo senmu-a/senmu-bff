@@ -29,28 +29,30 @@ const { port, viewDir, memoryFlag, staticDir } = config;
 const app = new Koa();
 
 // 将渲染函数包装在 co.wrap 中，以便在 Koa 中使用异步函数
-app.context.render = co.wrap(
-  render({
-    // 设置视图文件的根目录
-    root: viewDir,
-    // 启用自动转义，以防止 XSS 攻击
-    autoescape: true,
-    // 设置缓存方式，本地不缓存，线上缓存
-    cache: <'memory' | false>memoryFlag,
-    // 不直接写入响应体
-    writeBody: false,
-    // 设置视图文件的扩展名为 'html'
-    ext: 'html',
-  })
-);
+// app.context.render = co.wrap(
+//   render({
+//     // 设置视图文件的根目录
+//     root: viewDir,
+//     // 启用自动转义，以防止 XSS 攻击
+//     autoescape: true,
+//     // 设置缓存方式，本地不缓存，线上缓存
+//     cache: <'memory' | false>memoryFlag,
+//     // 不直接写入响应体
+//     writeBody: false,
+//     // 设置视图文件的扩展名为 'html'
+//     ext: 'html',
+//   })
+// );
 //静态资源生效节点
-app.use(serve(staticDir));
+// app.use(serve(staticDir));
+
+const fileExt = process.env.NODE_ENV === 'development' ? '.ts' : '.js';
 
 // 创建IOC容器
 const container = createContainer();
 
 // 加载模块，将所有可以被注入的代码都在container中（DI）
-container.loadModules([`${__dirname}/services/*.ts`], {
+container.loadModules([`${__dirname}/services/*${fileExt}`], {
   formatName: 'camelCase', // 将文件名转换为驼峰命名
   resolverOptions: {
     lifetime: Lifetime.SCOPED, // 每次请求都会创建一个新的实例
@@ -65,7 +67,7 @@ app.use(scopePerRequest(container));
 ErrorHandler.error(app, logger);
 
 // 注册所有路由
-app.use(loadControllers(`${__dirname}/routers/*.ts`));
+app.use(loadControllers(`${__dirname}/routers/*${fileExt}`));
 if (process.env.NODE_ENV === 'development') {
   app.listen(port, () => {
     console.log(`🌼🌼🌼Server is running on port ${port}`);

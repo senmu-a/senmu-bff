@@ -19,5 +19,15 @@ class ApiController {
       data,
     };
   }
+
+  @route('/hello')
+  @GET()
+  actionHello(
+    ctx: IRouterContext,
+    next: () => Promise<any>
+  ): void {
+    ctx.body = 'hello world';
+  }
+
 }
 export default ApiController;

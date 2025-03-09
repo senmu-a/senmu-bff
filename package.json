@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "serve": "ts-node-dev --respawn --transpile-only main.ts",
-    "build": "tsc",
+    "build": "webpack --config webpack.config.js",
     "start": "pm2 start ecosystem.config.js --env production",
     "stop": "pm2 stop senmu-app",
     "reload": "pm2 reload senmu-app",
@@ -35,7 +35,10 @@
     "@types/module-alias": "^2.0.4",
     "@types/node": "^22.13.5",
     "pm2": "^5.4.3",
+    "ts-loader": "^9.5.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1"
   }
 }

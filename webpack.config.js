@@ -21,7 +21,7 @@ module.exports = {
     lambda: './lambda.ts',  // 入口文件设置，名称为 lambda，路径为 ./lambda.ts
   },
   target: 'node',    // 目标环境为 Node.js !!!
-  mode: 'development',  // 构建模式为开发模式
+  mode: 'production',  // 构建模式为开发模式
   
   // 设置外部依赖，这些依赖不会被打包
   externals: [
@@ -65,7 +65,12 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.json'],  // 自动解析的扩展名
     alias: {
-      '@': path.resolve(__dirname, 'src/'),  // 设置 @ 作为 src 目录的别名
+      '@interfaces': path.resolve(__dirname, 'interfaces/'),  // 设置 @interfaces 作为 interfaces 目录的别名
+      '@config': path.resolve(__dirname, 'config/'),  // 设置 @config 作为 config 目录的别名
+      '@middlewares': path.resolve(__dirname, 'middlewares/'),  // 设置 @middlewares 作为 middlewares 目录的别名
+      '@utils': path.resolve(__dirname, 'utils/'),  // 设置 @utils 作为 utils 目录的别名
+      '@services': path.resolve(__dirname, 'services/'),  // 设置 @services 作为 services 目录的别名
+      '@routers': path.resolve(__dirname, 'routers/'),  // 设置 @routers 作为 routers 目录的别名
     },
   },
   
@@ -79,6 +84,8 @@ module.exports = {
     chunkFilename: '[name].[contenthash].js',  // 非入口 chunk 文件命名方式，使用内容哈希以便缓存
     clean: true,  // 构建前清理输出目录
     libraryTarget: 'commonjs2',  // 输出的库类型为 CommonJS 模块
+    publicPath: './',
+    devtoolModuleFilenameTemplate: '[absolute-resource-path]'
   },
   
   // 优化配置
@@ -100,10 +107,12 @@ module.exports = {
             }
             // 根据文件在 src 下的相对路径命名分割后的文件
             const srcPath = path.relative(
-              path.join(__dirname, 'src'),
+              path.join(__dirname, ''),
               module.resource
             );
-            return srcPath.replace(/\.ts$/, '');  // 去掉 .ts 后缀
+            // return srcPath.replace(/\.ts$/, '');  // 去掉 .ts 后缀
+            // 替换所有反斜杠为正斜杠
+            return srcPath.replace(/\\/g, '/').replace(/\.ts$/, '');
           },
           chunks: 'all',    // 处理所有类型的 chunk
           enforce: true,    // 强制创建这个缓存组的 chunk
