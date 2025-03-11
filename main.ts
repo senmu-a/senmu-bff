@@ -24,27 +24,29 @@ import config from '@config/index';
 
 import ErrorHandler from '@middlewares/error-handler';
 
+import { historyApiFallback } from 'koa2-connect-history-api-fallback';
+
 const { port, viewDir, memoryFlag, staticDir } = config;
 
 const app = new Koa();
 
 // 将渲染函数包装在 co.wrap 中，以便在 Koa 中使用异步函数
-// app.context.render = co.wrap(
-//   render({
-//     // 设置视图文件的根目录
-//     root: viewDir,
-//     // 启用自动转义，以防止 XSS 攻击
-//     autoescape: true,
-//     // 设置缓存方式，本地不缓存，线上缓存
-//     cache: <'memory' | false>memoryFlag,
-//     // 不直接写入响应体
-//     writeBody: false,
-//     // 设置视图文件的扩展名为 'html'
-//     ext: 'html',
-//   })
-// );
+app.context.render = co.wrap(
+  render({
+    // 设置视图文件的根目录
+    root: viewDir,
+    // 启用自动转义，以防止 XSS 攻击
+    autoescape: true,
+    // 设置缓存方式，本地不缓存，线上缓存
+    cache: <'memory' | false>memoryFlag,
+    // 不直接写入响应体
+    writeBody: false,
+    // 设置视图文件的扩展名为 'html'
+    ext: 'html',
+  })
+);
 //静态资源生效节点
-// app.use(serve(staticDir));
+app.use(serve(staticDir));
 
 const fileExt = process.env.NODE_ENV === 'development' ? '.ts' : '.js';
 
@@ -66,8 +68,11 @@ app.use(scopePerRequest(container));
 // 错误处理句柄
 ErrorHandler.error(app, logger);
 
+app.use(historyApiFallback({ index: '/', whiteList: ['/api'] }));
+
 // 注册所有路由
 app.use(loadControllers(`${__dirname}/routers/*${fileExt}`));
+
 if (process.env.NODE_ENV === 'development') {
   app.listen(port, () => {
     console.log(`🌼🌼🌼Server is running on port ${port}`);

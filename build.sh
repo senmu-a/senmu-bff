@@ -41,7 +41,8 @@ cat > layer/nodejs/package.json << EOF
     "koa-swig": "^2.2.1",
     "log4js": "^6.9.1",
     "module-alias": "^2.2.3",
-    "serverless-http": "^3.2.0"
+    "serverless-http": "^3.2.0",
+    "koa2-connect-history-api-fallback": "^0.1.3"
   }
 }
 EOF

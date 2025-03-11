@@ -1,6 +1,6 @@
 import { GET, route } from 'awilix-koa';
 import type { IRouterContext } from 'koa-router';
-import type { IApi } from '@interfaces/index';
+import type { IApi } from '@interfaces/api-interface';
 
 @route('/api')
 class ApiController {
@@ -19,15 +19,5 @@ class ApiController {
       data,
     };
   }
-
-  @route('/hello')
-  @GET()
-  actionHello(
-    ctx: IRouterContext,
-    next: () => Promise<any>
-  ): void {
-    ctx.body = 'hello world';
-  }
-
 }
 export default ApiController;

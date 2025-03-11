@@ -1,4 +1,5 @@
-import { IApi, IData } from '@interfaces/index';
+import { IApi } from '@interfaces/api-interface';
+import { IData } from '@interfaces/data-interface';
 
 class ApiService implements IApi<IData> {
   getInfo() {

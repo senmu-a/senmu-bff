@@ -9,26 +9,23 @@ Globals:
     Architectures: ['arm64']
     Environment:
       Variables:
-        NODE_ENV: 'production'
         NODE_OPTIONS: '--enable-source-maps'
+        NODE_ENV: 'production'
     EphemeralStorage:
       Size: 512
-    Tracing: Active
   Api:
     OpenApiVersion: '2.0'
     Cors:
       AllowMethods: "'*'"
-      AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+      AllowHeaders: "'Content-Type,Authorization'"
       AllowOrigin: "'*'"
       MaxAge: 600
-    EndpointConfiguration: REGIONAL
-    TracingEnabled: true
 
 Resources:
   NodeModulesLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
-      LayerName: 'senmu-bff-dependencies'
+      LayerName: senmu-bff-dependencies
       Description: Node modules for Koa application
       ContentUri: layer/
       CompatibleRuntimes:
@@ -38,11 +35,11 @@ Resources:
   Api:
     Type: AWS::Serverless::Api
     Properties:
-      StageName: 'dev'
+      StageName: dev
       BinaryMediaTypes:
         - 'image/*'
         - 'multipart/form-data'
-        - 'application/octet-stream'
+        - 'text/html'
       Auth:
         DefaultAuthorizer: NONE
 
@@ -59,9 +56,18 @@ Resources:
         - !Ref NodeModulesLayer
       Policies:
         - S3CrudPolicy:
-            BucketName: 'dms-senmu-assests'
+            BucketName: dms-senmu-assests
         - VPCAccessPolicy: {}
+        - CloudWatchLogsFullAccess
       Events:
+        RootPathEvent:
+          Type: Api
+          Properties:
+            Path: /
+            Method: ANY
+            RestApiId: !Ref Api
+            Auth:
+              Authorizer: NONE
         ApiEvent:
           Type: Api
           Properties:
