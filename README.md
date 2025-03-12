@@ -23,11 +23,19 @@ senmu-bff 是一个使用 Koa.js 构建的 Node.js 应用，通过 AWS Lambda �
 
 ### 进行中
 
-- [ ] 使用 AWS SAM CLI 进行本地测试
+- [x] 使用 AWS SAM CLI 进行本地测试
+
+  ```shell
+  0. docker ps # 前提是 docker 必须要安装
+  1. sam local invoke # 调用一次 lambda 函数
+  2. sam local start-api # 本地启动一个服务供测试 api 的测试
+  ```
+
+- [ ] Api Gateway 打日志
 - [ ] webpack 打包导致部署到 AWS 出现 404 问题
 - [ ] 前端静态资源部署到 S3
 - [ ] CloudFront 是什么？
-- [ ] Api Gateway 打日志
+- [ ] 重用代码 - 嵌套应用 `AWS::Serverless::Application`
 
 ## 快速开始
 

@@ -58,7 +58,9 @@ Resources:
         - S3CrudPolicy:
             BucketName: dms-senmu-assests
         - VPCAccessPolicy: {}
-        - CloudWatchLogsFullAccess
+        - CloudWatchDashboardPolicy: {}
+        - CloudWatchDescribeAlarmHistoryPolicy: {}
+        - CloudWatchPutMetricPolicy: {}
       Events:
         RootPathEvent:
           Type: Api
