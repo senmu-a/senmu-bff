@@ -1,5 +1,6 @@
 import Koa from 'koa';
-import type { IContext, IErrorLogger } from '@interfaces/index';
+import type { IContext } from '@interfaces/koa-interface';
+import type { IErrorLogger } from '@interfaces/error-interface';
 
 class ErrorHandler {
   static error(app: Koa, { appLogger, systemLogger, accessLogger }: IErrorLogger) {

@@ -33,8 +33,9 @@ senmu-bff 是一个使用 Koa.js 构建的 Node.js 应用，通过 AWS Lambda �
 
 - [ ] Api Gateway 打日志
 - [ ] webpack 打包导致部署到 AWS 出现 404 问题
-- [ ] 前端静态资源部署到 S3
-- [ ] CloudFront 是什么？
+- [x] 前端静态资源部署到 S3
+- [x] CloudFront 是什么？ 类似 CDN，可以将资源分发到世界各地（边缘部署），还可以设置缓存
+- [ ] 直接访问 `https://4cp93xhuy0.execute-api.us-east-2.amazonaws.com/dev/` 404 的问题（添加自定义域名）
 - [ ] 重用代码 - 嵌套应用 `AWS::Serverless::Application`
 
 ## 快速开始

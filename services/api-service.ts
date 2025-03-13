@@ -7,6 +7,7 @@ class ApiService implements IApi<IData> {
       resolve({
         item: '我是后台数据🌺',
         result: [1, 'next'],
+        staticAssetsUrl: process.env.STATIC_ASSETS_URL || 'No Set'
       });
     });
   }

@@ -9,6 +9,7 @@
     "serve": "ts-node-dev --respawn --transpile-only main.ts",
     "build": "webpack --config webpack.config.js",
     "start": "pm2 start ecosystem.config.js --env production",
+    "dev": "pm2 start ecosystem.config.js --env development",
     "stop": "pm2 stop senmu-app",
     "reload": "pm2 reload senmu-app",
     "delete": "pm2 delete senmu-app",
